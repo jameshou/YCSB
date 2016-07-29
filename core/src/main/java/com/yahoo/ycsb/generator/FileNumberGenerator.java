@@ -19,16 +19,18 @@ import java.io.FileReader;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.text.NumberFormat;
+import java.text.ParseException;
 
 /**
  * A number generator, whose sequence is the lines of a file.
  */
-public class FileNumberGenerator extends Generator<Number>
+public class FileNumberGenerator extends NumberGenerator
 {
     private final String filename;
     private Number current;
     private BufferedReader reader;
-    private NumberFormat nf;
+    private NumberFormat numberFormat;
 
     /**
      * Create a FileNumberGenerator with the given file.
@@ -49,8 +51,12 @@ public class FileNumberGenerator extends Generator<Number>
     {
         try {
             return current = numberFormat.parse(reader.readLine());
+        } catch (ParseException pe) { 
+            throw new RuntimeException(pe);
+        } catch (NumberFormatException nfe) {
+            throw new RuntimeException(nfe);
         } catch(IOException e) {
-          throw new RuntimeException(e);
+            throw new RuntimeException(e);
         }
     }
 

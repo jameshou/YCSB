@@ -334,8 +334,8 @@ public class CoreWorkload extends Workload {
   /**
    *
    */
-  public static final String FILENUMGENERATOR_PATH_DEFAULT = "filenumgenerator.txt"
-  public static final String FILENUMGENERATOR_PATH_PROPERTY  = "filenumgeneratorpath"
+  public static final String FILENUMGENERATOR_PATH_DEFAULT = "filenumgenerator.txt";
+  public static final String FILENUMGENERATOR_PATH_PROPERTY  = "filenumgeneratorpath";
 
   NumberGenerator keysequence;
 
