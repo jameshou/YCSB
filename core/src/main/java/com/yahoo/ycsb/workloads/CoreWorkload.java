@@ -20,11 +20,13 @@ package com.yahoo.ycsb.workloads;
 import java.util.Properties;
 
 import com.yahoo.ycsb.*;
+import com.yahoo.ycsb.generator.Generator;
 import com.yahoo.ycsb.generator.AcknowledgedCounterGenerator;
 import com.yahoo.ycsb.generator.ConstantIntegerGenerator;
 import com.yahoo.ycsb.generator.CounterGenerator;
 import com.yahoo.ycsb.generator.DiscreteGenerator;
 import com.yahoo.ycsb.generator.ExponentialGenerator;
+import com.yahoo.ycsb.generator.FileGenerator;
 import com.yahoo.ycsb.generator.FileNumberGenerator;
 import com.yahoo.ycsb.generator.HistogramGenerator;
 import com.yahoo.ycsb.generator.HotspotIntegerGenerator;
@@ -341,7 +343,7 @@ public class CoreWorkload extends Workload {
 
   DiscreteGenerator operationchooser;
 
-  NumberGenerator keychooser;
+  Generator keychooser;
 
   NumberGenerator fieldchooser;
 
@@ -685,29 +687,29 @@ public class CoreWorkload extends Workload {
     int keynum;
     if (keychooser instanceof ExponentialGenerator) {
       do {
-        keynum = transactioninsertkeysequence.lastValue() - keychooser.nextValue().intValue();
+        keynum = transactioninsertkeysequence.lastValue() - ((Number)keychooser.nextValue()).intValue();
       } while (keynum < 0);
     } else {
       do {
-        keynum = keychooser.nextValue().intValue();
+        keynum = ((Number)keychooser.nextValue()).intValue();
       } while (keynum > transactioninsertkeysequence.lastValue());
     }
     return keynum;
   }
 
-  String nextKey() {
+  String nextKeyname() {
     String keyname;
     if (keychooser instanceof NumberGenerator) {
       keyname = buildKeyName(nextKeynum());
     } else {
-      keyname = keychooser.nextValue();
+      keyname = keychooser.nextString();
     }
     return keyname;
   }
 
   public void doTransactionRead(DB db) {
     // choose a random key
-    String keyname = nextKey();
+    String keyname = nextKeyname();
 
     HashSet<String> fields = null;
 
@@ -732,7 +734,7 @@ public class CoreWorkload extends Workload {
 
   public void doTransactionReadModifyWrite(DB db) {
     // choose a random key
-    String keyname = nextKey();
+    String keyname = nextKeyname();
 
     HashSet<String> fields = null;
 
