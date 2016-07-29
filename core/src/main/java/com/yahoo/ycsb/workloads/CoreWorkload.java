@@ -25,6 +25,7 @@ import com.yahoo.ycsb.generator.ConstantIntegerGenerator;
 import com.yahoo.ycsb.generator.CounterGenerator;
 import com.yahoo.ycsb.generator.DiscreteGenerator;
 import com.yahoo.ycsb.generator.ExponentialGenerator;
+import com.yahoo.ycsb.generator.FileNumberGenerator;
 import com.yahoo.ycsb.generator.HistogramGenerator;
 import com.yahoo.ycsb.generator.HotspotIntegerGenerator;
 import com.yahoo.ycsb.generator.NumberGenerator;
@@ -333,8 +334,8 @@ public class CoreWorkload extends Workload {
   /**
    *
    */
-  public static final String FILEGENERATOR_PATH_DEFAULT = "filegenerator.txt"
-  public static final String FILEGENERATOR_PATH_PROPERTY  = "filegeneratorpath"
+  public static final String FILENUMGENERATOR_PATH_DEFAULT = "filenumgenerator.txt"
+  public static final String FILENUMGENERATOR_PATH_PROPERTY  = "filenumgeneratorpath"
 
   NumberGenerator keysequence;
 
@@ -483,9 +484,9 @@ public class CoreWorkload extends Workload {
       keychooser = new ScrambledZipfianGenerator(insertstart, insertstart + insertcount + expectednewkeys);
     } else if (requestdistrib.compareTo("latest") == 0) {
       keychooser = new SkewedLatestGenerator(transactioninsertkeysequence);
-    } else if (requestdistrib.compareTo("filegenerator") == 0) {
-      String filename = p.getProperty(FILEGENERATOR_PATH_PROPERTY, FILEGENERATOR_PATH_DEFAULT);
-      keychooser = new FileGenerator(filename);
+    } else if (requestdistrib.compareTo("filenumgenerator") == 0) {
+      String filename = p.getProperty(FILENUMGENERATOR_PATH_PROPERTY, FILENUMGENERATOR_PATH_DEFAULT);
+      keychooser = new FileNumberGenerator(filename);
     } else if (requestdistrib.equals("hotspot")) {
       double hotsetfraction =
           Double.parseDouble(p.getProperty(HOTSPOT_DATA_FRACTION, HOTSPOT_DATA_FRACTION_DEFAULT));
