@@ -74,7 +74,7 @@ import java.util.Vector;
  * <LI><b>zeropadding</b>: for generating a record sequence compatible with string sort order by
  * 0 padding the record number. Controls the number of 0s to use for padding. (default: 1)
  * For example for row 5, with zeropadding=1 you get 'user5' key and with zeropading=8 you get
- * 'user00000005' key. In order to see its impact, zeropadding needs to be bigger than number of 
+ * 'user00000005' key. In order to see its impact, zeropadding needs to be bigger than number of
  * digits in the record number.
  * <LI><b>insertorder</b>: should records be inserted in order by key ("ordered"), or in hashed
  * order ("hashed") (default: hashed)
@@ -266,7 +266,7 @@ public class CoreWorkload extends Workload {
    */
   public static final String ZERO_PADDING_PROPERTY_DEFAULT = "1";
 
-  
+
   /**
    * The name of the property for the max scan length (number of records).
    */
@@ -329,6 +329,12 @@ public class CoreWorkload extends Workload {
    */
   public static final String INSERTION_RETRY_INTERVAL = "core_workload_insertion_retry_interval";
   public static final String INSERTION_RETRY_INTERVAL_DEFAULT = "3";
+
+  /**
+   *
+   */
+  public static final String FILEGENERATOR_PATH_DEFAULT = "filegenerator.txt"
+  public static final String FILEGENERATOR_PATH_PROPERTY  = "filegeneratorpath"
 
   NumberGenerator keysequence;
 
@@ -395,7 +401,7 @@ public class CoreWorkload extends Workload {
       fieldnames.add("field" + i);
     }
     fieldlengthgenerator = CoreWorkload.getFieldLengthGenerator(p);
-    
+
     recordcount =
         Integer.parseInt(p.getProperty(Client.RECORD_COUNT_PROPERTY, Client.DEFAULT_RECORD_COUNT));
     if (recordcount == 0) {
@@ -477,6 +483,9 @@ public class CoreWorkload extends Workload {
       keychooser = new ScrambledZipfianGenerator(insertstart, insertstart + insertcount + expectednewkeys);
     } else if (requestdistrib.compareTo("latest") == 0) {
       keychooser = new SkewedLatestGenerator(transactioninsertkeysequence);
+    } else if (requestdistrib.compareTo("latest") == 0) {
+      String filename = p.getProperty(FILEGENERATOR_PATH_PROPERTY, FILEGENERATOR_PATH_DEFAULT);
+      keychooser = new FileGenerator(filename);
     } else if (requestdistrib.equals("hotspot")) {
       double hotsetfraction =
           Double.parseDouble(p.getProperty(HOTSPOT_DATA_FRACTION, HOTSPOT_DATA_FRACTION_DEFAULT));
@@ -640,7 +649,7 @@ public class CoreWorkload extends Workload {
       break;
     default:
       doTransactionReadModifyWrite(db);
-    } 
+    }
 
     return true;
   }
@@ -711,7 +720,7 @@ public class CoreWorkload extends Workload {
       verifyRow(keyname, cells);
     }
   }
-  
+
   public void doTransactionReadModifyWrite(DB db) {
     // choose a random key
     int keynum = nextKeynum();
@@ -837,7 +846,7 @@ public class CoreWorkload extends Workload {
         p.getProperty(SCAN_PROPORTION_PROPERTY, SCAN_PROPORTION_PROPERTY_DEFAULT));
     final double readmodifywriteproportion = Double.parseDouble(p.getProperty(
         READMODIFYWRITE_PROPORTION_PROPERTY, READMODIFYWRITE_PROPORTION_PROPERTY_DEFAULT));
-    
+
     final DiscreteGenerator operationchooser = new DiscreteGenerator();
     if (readproportion > 0) {
       operationchooser.addValue(readproportion, "READ");
