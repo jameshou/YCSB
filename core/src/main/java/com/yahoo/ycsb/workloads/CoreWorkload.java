@@ -28,6 +28,7 @@ import com.yahoo.ycsb.generator.DiscreteGenerator;
 import com.yahoo.ycsb.generator.ExponentialGenerator;
 import com.yahoo.ycsb.generator.FileGenerator;
 import com.yahoo.ycsb.generator.FileNumberGenerator;
+import com.yahoo.ycsb.generator.FileRandomGenerator;
 import com.yahoo.ycsb.generator.HistogramGenerator;
 import com.yahoo.ycsb.generator.HotspotIntegerGenerator;
 import com.yahoo.ycsb.generator.NumberGenerator;
@@ -345,6 +346,13 @@ public class CoreWorkload extends Workload {
   public static final String FILENUMGENERATOR_PATH_DEFAULT = "filenumgenerator.txt";
   public static final String FILENUMGENERATOR_PATH_PROPERTY  = "filenumgeneratorpath";
 
+  /**
+   *
+   */
+  public static final String FILERANDOMGENERATOR_PATH_DEFAULT = "filerandomgenerator.txt";
+  public static final String FILERANDOMGENERATOR_PATH_PROPERTY  = "filerandomgeneratorpath";
+
+
   NumberGenerator keysequence;
 
   DiscreteGenerator operationchooser;
@@ -495,6 +503,9 @@ public class CoreWorkload extends Workload {
     } else if (requestdistrib.compareTo("filegenerator") == 0) {
       String filename = p.getProperty(FILEGENERATOR_PATH_PROPERTY, FILEGENERATOR_PATH_DEFAULT);
       keychooser = new FileGenerator(filename);
+    } else if (requestdistrib.compareTo("filerandomgenerator") == 0) {
+      String filename = p.getProperty(FILERANDOMGENERATOR_PATH_PROPERTY, FILERANDOMGENERATOR_PATH_DEFAULT);
+      keychooser = new FileRandomGenerator(filename);
     } else if (requestdistrib.compareTo("filenumgenerator") == 0) {
       String filename = p.getProperty(FILENUMGENERATOR_PATH_PROPERTY, FILENUMGENERATOR_PATH_DEFAULT);
       keychooser = new FileNumberGenerator(filename);
