@@ -695,11 +695,19 @@ public class CoreWorkload extends Workload {
     return keynum;
   }
 
+  String nextKey() {
+    String keyname;
+    if (keychooser instanceof NumberGenerator) {
+      keyname = buildKeyName(nextKeynum());
+    } else {
+      keyname = keychooser.nextValue();
+    }
+    return keyname;
+  }
+
   public void doTransactionRead(DB db) {
     // choose a random key
-    int keynum = nextKeynum();
-
-    String keyname = buildKeyName(keynum);
+    String keyname = nextKey();
 
     HashSet<String> fields = null;
 
@@ -724,9 +732,7 @@ public class CoreWorkload extends Workload {
 
   public void doTransactionReadModifyWrite(DB db) {
     // choose a random key
-    int keynum = nextKeynum();
-
-    String keyname = buildKeyName(keynum);
+    String keyname = nextKey();
 
     HashSet<String> fields = null;
 
@@ -771,9 +777,7 @@ public class CoreWorkload extends Workload {
 
   public void doTransactionScan(DB db) {
     // choose a random key
-    int keynum = nextKeynum();
-
-    String startkeyname = buildKeyName(keynum);
+    String startkeyname = nextKeyname();
 
     // choose a random scan length
     int len = scanlength.nextValue().intValue();
@@ -793,9 +797,7 @@ public class CoreWorkload extends Workload {
 
   public void doTransactionUpdate(DB db) {
     // choose a random key
-    int keynum = nextKeynum();
-
-    String keyname = buildKeyName(keynum);
+    String keyname = nextKeyname();
 
     HashMap<String, ByteIterator> values;
 
