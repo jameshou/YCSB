@@ -16,6 +16,7 @@
 package com.yahoo.ycsb.generator;
 
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -33,8 +34,8 @@ public class FileRandomGenerator extends Generator<String>
 {
     private final String filename;
     private String current;
-    private List<String> keys;
-    private Random randomGenerator;
+    private List<String> keys = new ArrayList<String>();
+    private Random randomGenerator = new Random();
 
     /**
      * Create a FileRandomGenerator with the given file.
@@ -71,12 +72,13 @@ public class FileRandomGenerator extends Generator<String>
 
         System.err.println("Load " + filename);
         Path path = Paths.get(filename);
-        Charset charset = Charset.forName("ISO-8859-1");
+        Charset charset = StandardCharsets.UTF_8;
         try {
             keys = Files.readAllLines(path, charset);
         } catch (IOException ioe) {
             throw new RuntimeException(ioe);
         }
+        System.err.println("Loaded " + keys.length() + " records");
 
     }
 }
